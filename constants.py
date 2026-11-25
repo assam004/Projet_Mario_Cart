@@ -20,6 +20,9 @@ CAR_AIR_FRICTION = 0.985
 CAR_WIDTH = 30
 CAR_HEIGHT = 50
 
+# Vitesse de rotation de la voiture (degrés par frame)
+CAR_TURN_SPEED = 2
+
 
 class GameState:
     MENU = "menu"

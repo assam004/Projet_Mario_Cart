@@ -8,7 +8,8 @@ from constants import (
     TILE_SIZE,
     CAR_MAX_SPEED,
     CAR_MAX_REVERSE_SPEED,
-    CAR_AIR_FRICTION
+    CAR_AIR_FRICTION,
+    CAR_TURN_SPEED
 )
 
 
@@ -45,30 +46,61 @@ class Car:
         # Limite la vitesse maximale en marche arrière
         self.speed = max(self.speed, -CAR_MAX_REVERSE_SPEED)
 
+    def turn_left(self) -> None:
+        """Tourne la voiture vers la gauche."""
+
+        # Augmente l'angle de la voiture
+        self.angle -= CAR_TURN_SPEED
+
+    def turn_right(self) -> None:
+        """Tourne la voiture vers la droite."""
+
+        # Diminue l'angle de la voiture
+        self.angle += CAR_TURN_SPEED
+
     def update_position(self) -> None:
-        """Met à jour la vitesse et la position."""
+        """Met à jour la vitesse et la position de la voiture."""
 
         # Applique les frottements de l'air
         self.speed *= CAR_AIR_FRICTION
 
-        # Arrête la voiture si sa vitesse devient très faible
+        # Arrête la voiture si sa vitesse est très faible
         if abs(self.speed) < 0.01:
             self.speed = 0
 
-        # Met à jour la position verticale
-        self.y += self.speed
+        # Convertit l'angle en radians
+        angle_rad = math.radians(self.angle)
+
+        # Calcule le déplacement selon l'orientation de la voiture
+        self.x -= math.sin(angle_rad) * self.speed
+        self.y += math.cos(angle_rad) * self.speed
 
     def build_sprite(self) -> pygame.Surface:
-        """Crée l'image de la voiture."""
+        """Crée l'image de la voiture avec un avant et un arrière visibles."""
 
         surf = pygame.Surface((CAR_WIDTH, CAR_HEIGHT), pygame.SRCALPHA)
 
+        # Carrosserie rouge
         pygame.draw.rect(
-            surf,
-            (255, 0, 0),
+            surf, (255, 0, 0),
             (0, 0, CAR_WIDTH, CAR_HEIGHT),
             border_radius=5
         )
+
+        # Pare-brise bleu à l'avant de la voiture
+        pygame.draw.rect(
+            surf, (100, 200, 255),
+            (5, CAR_HEIGHT - 17, CAR_WIDTH - 10, 10),
+            border_radius=2
+        )
+
+        # Phares avant jaunes
+        pygame.draw.rect(surf, (255, 255, 0), (3, CAR_HEIGHT - 5, 6, 4))
+        pygame.draw.rect(surf, (255, 255, 0), (CAR_WIDTH - 9, CAR_HEIGHT - 5, 6, 4))
+
+        # Feux arrière noirs
+        pygame.draw.rect(surf, (50, 50, 50), (3, 2, 6, 4))
+        pygame.draw.rect(surf, (50, 50, 50), (CAR_WIDTH - 9, 2, 6, 4))
 
         return surf
 
