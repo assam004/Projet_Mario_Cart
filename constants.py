@@ -6,7 +6,17 @@ TILE_SIZE = 64
 GRID_COLS = 16
 GRID_ROWS = 12
 
+# Paramètres physiques de la voiture
 CAR_ACCELERATION = 0.05
+
+# Limite de vitesse en marche avant et arrière
+CAR_MAX_SPEED = 6
+CAR_MAX_REVERSE_SPEED = 3
+
+# Frottement de l'air : la vitesse diminue progressivement
+CAR_AIR_FRICTION = 0.985
+
+# Dimensions de la voiture
 CAR_WIDTH = 30
 CAR_HEIGHT = 50
 
