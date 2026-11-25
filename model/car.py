@@ -17,6 +17,9 @@ class Car:
     def accelerate(self) -> None:
         self.speed += CAR_ACCELERATION
 
+    def brake(self) -> None:
+        self.speed -= CAR_ACCELERATION    
+
     def update_position(self) -> None:
         self.y += self.speed
 
@@ -30,3 +33,4 @@ class Car:
         rotated = pygame.transform.rotate(self.sprite, -self.angle)
         rect = rotated.get_rect(center=(int(self.x), int(self.y)))
         return rotated, rect
+        
