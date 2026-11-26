@@ -11,10 +11,10 @@ CAR_ACCELERATION = 0.05
 
 # Limite de vitesse en marche avant et arrière
 CAR_MAX_SPEED = 6
-CAR_MAX_REVERSE_SPEED = 3
+CAR_MAX_REVERSE_SPEED = 2
 
 # Frottement de l'air : la vitesse diminue progressivement
-CAR_AIR_FRICTION = 0.985
+CAR_AIR_FRICTION = 0.991
 
 # Dimensions de la voiture
 CAR_WIDTH = 30
@@ -22,6 +22,9 @@ CAR_HEIGHT = 50
 
 # Vitesse de rotation de la voiture (degrés par frame)
 CAR_TURN_SPEED = 2
+
+# Adhérence de la voiture (entre 0 et 1)
+CAR_GRIP = 0.06
 
 
 class GameState:
