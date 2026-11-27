@@ -9,7 +9,8 @@ from constants import (
     CAR_MAX_SPEED,
     CAR_MAX_REVERSE_SPEED,
     CAR_AIR_FRICTION,
-    CAR_TURN_SPEED
+    CAR_TURN_SPEED,
+    CAR_GRIP
 )
 
 
@@ -26,6 +27,10 @@ class Car:
         # Vitesse et orientation initiales
         self.speed: float = 0.0
         self.angle: float = 0.0
+
+        # Vitesse horizontale et verticale
+        self.vx: float = 0.0
+        self.vy: float = 0.0        
 
         # Création de l'image de la voiture
         self.sprite = self.build_sprite()
@@ -59,7 +64,7 @@ class Car:
         self.angle += CAR_TURN_SPEED
 
     def update_position(self) -> None:
-        """Met à jour la vitesse et la position de la voiture."""
+        """Met à jour la vitesse, le dérapage et la position."""
 
         # Applique les frottements de l'air
         self.speed *= CAR_AIR_FRICTION
@@ -71,9 +76,17 @@ class Car:
         # Convertit l'angle en radians
         angle_rad = math.radians(self.angle)
 
-        # Calcule le déplacement selon l'orientation de la voiture
-        self.x -= math.sin(angle_rad) * self.speed
-        self.y += math.cos(angle_rad) * self.speed
+        # Calcule la vitesse souhaitée selon l'orientation
+        target_vx = -math.sin(angle_rad) * self.speed
+        target_vy = math.cos(angle_rad) * self.speed
+
+        # Fait évoluer progressivement la vitesse réelle
+        self.vx += (target_vx - self.vx) * CAR_GRIP
+        self.vy += (target_vy - self.vy) * CAR_GRIP
+
+        # Déplace la voiture selon sa vitesse réelle
+        self.x += self.vx
+        self.y += self.vy
 
     def build_sprite(self) -> pygame.Surface:
         """Crée l'image de la voiture avec un avant et un arrière visibles."""
