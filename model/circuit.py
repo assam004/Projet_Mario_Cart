@@ -1,5 +1,6 @@
 from model.road_tile import RoadTile
 from constants import TILE_SIZE
+from model.terrain import Terrain
 
 
 class Circuit:
@@ -24,3 +25,12 @@ class Circuit:
 
     def pixel_height(self) -> int:
         return self.rows * TILE_SIZE
+
+    def get_terrain_at_pixel(self, px: float, py: float) -> Terrain | None:
+        """Renvoie le terrain situé aux coordonnées données."""
+        tile = self.get_tile_at_pixel(px, py)
+
+        if tile is not None:
+            return tile.terrain
+
+        return None
