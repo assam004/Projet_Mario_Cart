@@ -26,6 +26,30 @@ CAR_TURN_SPEED = 2
 # Adhérence de la voiture (entre 0 et 1)
 CAR_GRIP = 0.06
 
+# Paramètres physiques selon le terrain
+# Paramètres physiques selon le terrain (valeurs de test)
+TERRAIN_PHYSICS = {
+    "road": {
+        "friction": 0.993,
+        "grip": 0.06
+    },
+
+    "grass": {
+        "friction": 0.965,
+        "grip": 0.5
+    },
+
+    "dirt": {
+        "friction": 0.955,
+        "grip": 0.15
+    },
+
+    "ice": {
+        "friction": 0.999,
+        "grip": 0.01
+    }
+}
+
 
 class GameState:
     MENU = "menu"

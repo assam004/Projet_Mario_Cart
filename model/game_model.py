@@ -53,6 +53,15 @@ class GameModel:
         self.car = Car(7, 1)
 
     def update(self) -> None:
-        if self.state != GameState.RACING or self.circuit is None:
+         """Met à jour la voiture selon le terrain."""
+
+         if self.state != GameState.RACING or self.circuit is None:
             return
-        self.car.update_position()
+
+          # Récupère le terrain sous la voiture
+         terrain = self.circuit.get_terrain_at_pixel(
+            self.car.x, self.car.y
+          )
+
+        # Transmet le terrain à la voiture
+         self.car.update_position(terrain)

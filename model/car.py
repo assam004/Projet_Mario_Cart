@@ -10,7 +10,8 @@ from constants import (
     CAR_MAX_REVERSE_SPEED,
     CAR_AIR_FRICTION,
     CAR_TURN_SPEED,
-    CAR_GRIP
+    CAR_GRIP,
+    TERRAIN_PHYSICS
 )
 
 
@@ -63,30 +64,42 @@ class Car:
         # Diminue l'angle de la voiture
         self.angle += CAR_TURN_SPEED
 
-    def update_position(self) -> None:
-        """Met à jour la vitesse, le dérapage et la position."""
+    def update_position(self, terrain=None) -> None:
+         """Met à jour la voiture selon le terrain."""
 
-        # Applique les frottements de l'air
-        self.speed *= CAR_AIR_FRICTION
+         # Valeurs par défaut
+         friction = CAR_AIR_FRICTION
+         grip = CAR_GRIP
 
-        # Arrête la voiture si sa vitesse est très faible
-        if abs(self.speed) < 0.01:
+        # Récupère les coefficients du terrain
+         if terrain is not None:
+            if terrain.name in TERRAIN_PHYSICS:
+                params = TERRAIN_PHYSICS[terrain.name]
+                friction = params["friction"]
+                grip = params["grip"]
+
+          # Applique les frottements
+         self.speed *= friction
+
+          # Arrête la voiture si sa vitesse est très faible
+         if abs(self.speed) < 0.01:
             self.speed = 0
 
-        # Convertit l'angle en radians
-        angle_rad = math.radians(self.angle)
+         # Convertit l'angle en radians
+         angle_rad = math.radians(self.angle)
 
-        # Calcule la vitesse souhaitée selon l'orientation
-        target_vx = -math.sin(angle_rad) * self.speed
-        target_vy = math.cos(angle_rad) * self.speed
+         # Calcule les vitesses souhaitées
+         target_vx = -math.sin(angle_rad) * self.speed
+         target_vy = math.cos(angle_rad) * self.speed
 
-        # Fait évoluer progressivement la vitesse réelle
-        self.vx += (target_vx - self.vx) * CAR_GRIP
-        self.vy += (target_vy - self.vy) * CAR_GRIP
+         # Applique l'adhérence du terrain
+         self.vx += (target_vx - self.vx) * grip
+         self.vy += (target_vy - self.vy) * grip
 
-        # Déplace la voiture selon sa vitesse réelle
-        self.x += self.vx
-        self.y += self.vy
+         # Déplace la voiture
+         self.x += self.vx
+         self.y += self.vy
+
 
     def build_sprite(self) -> pygame.Surface:
         """Crée l'image de la voiture avec un avant et un arrière visibles."""
